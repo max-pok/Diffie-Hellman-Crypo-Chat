@@ -4,10 +4,10 @@ import socket
 from sys import byteorder
 import json
 
-def recive_message(client_sock: socket, addr: str, secret: int) -> None:
+def recive_message(sock: socket, addr: str, secret: int) -> None:
     while True:
         try:
-            msg = client_sock.recv(4096)
+            msg = sock.recv(4096)
             msg = AESCipher(msg, str(secret)).decrypt()
             if not msg:
                 break
@@ -16,19 +16,26 @@ def recive_message(client_sock: socket, addr: str, secret: int) -> None:
         except socket.error:
             print("[ ERROR: Could not recive message ]")
             break
+        except ValueError:
+            break
 
-    print("\r[ Connection closed ]\n")
-    client_sock.close()
+    print(f"[ Connection with {addr} closed ]\n")
+    sock.close()   
+    
+    
 
-def send_message(client_sock: socket, secret: int) -> None:
+def send_message(sock: socket, secret: int) -> None:
     while True:
         msg = input("> ")
         encrypt_client = AESCipher(msg, str(secret)).encrypt()
         try:
-            client_sock.sendall(encrypt_client.encode("utf-8"))
+            sock.sendall(encrypt_client.encode("utf-8"))
         except socket.error:
             print("[ ERROR: Could not send message ]")
             break
+        
+    print(f"[ Connection closed ]\n")
+    sock.close()
 
 def generate_random_number(size: int) -> int:
     return int.from_bytes(urandom(size), byteorder)

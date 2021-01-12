@@ -14,7 +14,7 @@ if __name__ == "__main__":
 
     print(f"[ Connecting to {IP}:{PORT} ]")
     s.connect((IP, PORT))
-    print(f"[ Connected to {IP} ]")
+    print("[ Connected to ubuntu ]")
     
     print("[ Waiting for key exchange to be initiated ]")
 
@@ -43,7 +43,7 @@ if __name__ == "__main__":
             print("[ Generating secret key ]")
             SECRET_KEY = pow(server_key, private_key, server_public_key)
 
-            save_to_db(gethostname(), SECRET_KEY)
+            save_to_db(IP, SECRET_KEY)
 
             break
     
