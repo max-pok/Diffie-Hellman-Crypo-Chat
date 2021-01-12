@@ -27,7 +27,7 @@ if __name__ == "__main__":
             print("[ Sending public key ]")
             s.sendall(f"{public_key}".encode("utf-8"))
 
-            print("[ Receiving server's public key ]")
+            print("[ Receiving server public key ]")
             server_public_key = int(s.recv(4096).decode("utf-8"))
 
             print("[ Generating exchange key ]")

@@ -6,13 +6,16 @@ import json
 
 def recive_message(client_sock: socket, addr: str, secret: int) -> None:
     while True:
-        
-        msg = client_sock.recv(4096)
-        msg = AESCipher(msg, str(secret)).decrypt()
-        if not msg:
+        try:
+            msg = client_sock.recv(4096)
+            msg = AESCipher(msg, str(secret)).decrypt()
+            if not msg:
+                break
+            print(f"\033[96m\r{addr} : {msg}\033[0m")
+            print("\n> ", end="")
+        except socket.error:
+            print("[ ERROR: Could not recive message ]")
             break
-        print(f"\033[96m\r{addr} : {msg}\033[0m")
-        print("\n> ", end="")
 
     print("\r[ Connection closed ]\n")
     client_sock.close()
@@ -24,7 +27,7 @@ def send_message(client_sock: socket, secret: int) -> None:
         try:
             client_sock.sendall(encrypt_client.encode("utf-8"))
         except socket.error:
-            print("\r[ ERROR: Could not send message")
+            print("[ ERROR: Could not send message ]")
             break
 
 def generate_random_number(size: int) -> int:

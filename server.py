@@ -16,10 +16,10 @@ def start_server():
 
     print(f"[ Server started on {IP}:{PORT} ]")
 
-    return server_socket, []
+    return server_socket
 
 if __name__ == "__main__":
-    socket, clients = start_server()
+    sock = start_server()
     
     with open("data.json", mode='w', encoding='utf-8') as f:
         json.dump({}, f)
@@ -29,7 +29,7 @@ if __name__ == "__main__":
     private_key = generate_random_number(32)
     SECRET_KEY = None
     
-    client_socket, client_addr = socket.accept()
+    client_socket, client_addr = sock.accept()
     print(f'[ {client_addr} connected ]')
         
     SECRET_KEY = key_exchange(client_socket, public_key, private_key)
